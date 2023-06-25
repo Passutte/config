@@ -177,7 +177,7 @@ fi
 step "config files"
 
 sub_step "fish"
-mkdir -p ~/.config/fish && \
+mkdir -p ~/.config/fish
 cp .config/fish/config.fish ~/.config/fish
 
 sub_step "ssh"
