@@ -146,6 +146,13 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sub_step "guake"
     sudo apt install -y guake
 
+    ##########################################
+    step "Install Docker via convenience script"
+    # https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
+    curl -fsSL https://get.docker.com -o get-docker.sh
+    sudo sh get-docker.sh
+
+
 
 ##########################################
 # Installation Steps - MacOS
@@ -161,7 +168,7 @@ elif [ $os = "macOS" ]; then
 
     sub_step "iterm2"
     sudo -u $user_name_macbook brew install --cask iterm2
-    
+
 fi
 
 ##########################################
@@ -172,5 +179,19 @@ step "config files"
 sub_step "fish"
 mkdir -p ~/.config/fish && \
 cp .config/fish/config.fish ~/.config/fish
+
+sub_step "ssh"
+mkdir -p ~/.ssh && \
+cp .ssh/config ~/.ssh
+
+if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
+  sub_step "bashrc"
+  cp ubuntu/.bashrc "$user_home_dir"
+
+elif [ $os = "macOS" ]; then
+  sub_step "zshrc"
+  cp macOS/.zshrc "$user_home_dir"
+
+fi
 
 exit 0
