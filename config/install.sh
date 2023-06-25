@@ -95,6 +95,9 @@ else
   fi
 fi
 
+# when running on parallels - this is needed for copying the files to the directories
+export HOME=$user_home_dir
+
 ##########################################
 # Installation Steps - Ubuntu
 ##########################################
