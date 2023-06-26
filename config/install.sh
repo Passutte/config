@@ -183,6 +183,12 @@ sub_step "fish"
 mkdir -p ~/.config/fish
 cp .config/fish/config.fish ~/.config/fish
 
+# fish needs to be run as sudo - different location in parallels
+if [ $os = "parallels" ]; then
+  mkdir -p /root/.config/fish
+  cp .config/fish/config.fish /root/.config/fish
+fi
+
 sub_step "ssh"
 mkdir -p ~/.ssh && \
 cp .ssh/config ~/.ssh
