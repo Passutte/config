@@ -149,6 +149,9 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sub_step "guake"
     sudo apt install -y guake
 
+    sub_step "mosh"
+    sudo apt-get install mosh
+
     ##########################################
     step "Install Docker via convenience script"
     # https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
@@ -171,6 +174,9 @@ elif [ $os = "macOS" ]; then
 
     sub_step "iterm2"
     sudo -u $user_name_macbook brew install --cask iterm2
+
+    sub_step "mosh"
+    sudo -u $user_name_macbook brew install mosh
 
 fi
 

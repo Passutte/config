@@ -24,7 +24,6 @@ export PATH=$PATH:/opt/opt/anaconda3/bin/conda
 ### Aliases
 
 # Euler Connection ETH
-alias ssheuler="ssh -Y passutte@euler.ethz.ch"
 #alias mounteuler="sshfs passutte@euler.ethz.ch:/cluster/home/passutte/machine_perception /Users/pascal/Developer/ETH/Machine_Perception/Perceptrons/"
 #alias umounteuler="umount -f /Users/pascal/Developer/ETH/Machine_Perception/Perceptrons"
 
