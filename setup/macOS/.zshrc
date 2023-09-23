@@ -1,7 +1,6 @@
 ### Python 
 alias python3=/usr/local/bin/python3
 
-
 ### Conda Environment
 
 # >>> conda initialize >>>

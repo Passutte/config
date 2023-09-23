@@ -178,6 +178,9 @@ elif [ $os = "macOS" ]; then
     sub_step "mosh"
     sudo -u $user_name_macbook brew install mosh
 
+    sub_step "tmux"
+    sudo -u $user_name_macbook brew install -y tmux
+
 fi
 
 ##########################################
@@ -198,6 +201,15 @@ fi
 sub_step "ssh"
 mkdir -p ~/.ssh && \
 cp .ssh/config ~/.ssh
+
+sub_step "tmux"
+cp .tmux.conf "$user_home_dir"
+cp -a .tmux "$user_home_dir"
+# tmux plugins
+git clone https://github.com/tmux-plugins/tpm "$user_home_dir/.tmux/plugins/tpm"
+# source it 
+tmux source-file ~/.tmux.conf
+
 
 if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
   sub_step "bashrc"
