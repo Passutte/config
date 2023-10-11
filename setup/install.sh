@@ -79,7 +79,7 @@ else
     disp_usage
     exit 22
     fi
-    user_home_dir="/Users/$user_name"
+    user_home_dir="/home/$user_name"
     echo ">>> Starting setup for a ubuntu device with home directory: $user_home_dir"
 
   elif [ "$2" = "parallels" ]; then
