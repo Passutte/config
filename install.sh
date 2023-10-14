@@ -10,9 +10,8 @@ step_msg=""
 (( sub_step_num=1 ))
 os=""
 user_name=""
-user_name_macbook="pascalsutter"
+user_name_macbook=""
 user_home_dir=""
-
 
 ##########################################
 # Functions
@@ -51,7 +50,7 @@ disp_usage() {
 ##########################################
 
 # check for valid usage
-if [ "$#" -ne 2 ] || [ "$2" != "macOS" ] && [ "$2" != "ubuntu" ] && [ "$2" != "parallels" ]; then
+if [ "$2" != "macOS" ] && [ "$2" != "ubuntu" ] && [ "$2" != "parallels" ]; then
   # invalid usage
   disp_usage
   # Ref exit codes: https://www.cyberciti.biz/faq/linux-bash-exit-status-set-exit-statusin-bash/
@@ -159,18 +158,15 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sudo sh get-docker.sh
 
 
-
 ##########################################
 # Installation Steps - MacOS
 ##########################################
 elif [ $os = "macOS" ]; then
     step "install with brew"
+    user_name_macbook=$3
 
     sub_step "fish"
     sudo -u $user_name_macbook brew install fish
-
-    #sub_step "copyq"
-    #sudo -u $user_name_macbook brew install --cask copyq
 
     sub_step "iterm2"
     sudo -u $user_name_macbook brew install --cask iterm2
@@ -179,7 +175,7 @@ elif [ $os = "macOS" ]; then
     sudo -u $user_name_macbook brew install mosh
 
     sub_step "tmux"
-    sudo -u $user_name_macbook brew install -y tmux
+    sudo -u $user_name_macbook brew install tmux
 
 fi
 
@@ -202,23 +198,18 @@ sub_step "ssh"
 mkdir -p ~/.ssh && \
 cp .ssh/config ~/.ssh
 
-sub_step "tmux"
-cp .tmux.conf "$user_home_dir"
-cp -a .tmux "$user_home_dir"
-# tmux plugins
-git clone https://github.com/tmux-plugins/tpm "$user_home_dir/.tmux/plugins/tpm"
-# source it 
-tmux source-file ~/.tmux.conf
-
-
 if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
   sub_step "bashrc"
   cp ubuntu/.bashrc "$user_home_dir"
-
+  
 elif [ $os = "macOS" ]; then
   sub_step "zshrc"
   cp macOS/.zshrc "$user_home_dir"
-
 fi
+
+sub_step "bash_aliases"
+cp .bash_aliases "$user_home_dir"
+
+
 
 exit 0
