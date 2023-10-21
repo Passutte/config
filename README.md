@@ -40,3 +40,18 @@ guake --save-preferences=guake.cfg
 ### Additional Plugins
 * https://github.com/ohmyzsh/ohmyzsh/tree/master
 * https://github.com/ohmybash/oh-my-bash
+
+### VSCode Extensions
+https://www.ubuntupit.com/best-visual-studio-code-extensions-for-programmers/
+
+### Useful Stuff
+
+Anaconda:
+
+```bash
+conda init <>
+```
+
+```bash
+conda config --set auto_activate_base false
+```
