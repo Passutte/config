@@ -210,6 +210,10 @@ fi
 sub_step "bash_aliases"
 cp .bash_aliases "$user_home_dir"
 
-
+sub_step "tmux"
+cp .tmux.conf "$user_home_dir"
+cp .tmux "$user_home_dir"
+# tmux plugins
+git clone https://github.com/tmux-plugins/tpm "$user_home_dir/.tmux/plugins/tpm"
 
 exit 0
