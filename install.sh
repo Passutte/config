@@ -216,4 +216,13 @@ cp .tmux "$user_home_dir"
 # tmux plugins
 git clone https://github.com/tmux-plugins/tpm "$user_home_dir/.tmux/plugins/tpm"
 
+##########################################
+# Permissions
+##########################################
+if [ $os = "parallels" ]; then
+  step "Permissions"
+  sudo chown -R parallels:parallels $HOME/.config/fish
+  chmod -R 700 $HOME/.config/fish
+fi
+
 exit 0
