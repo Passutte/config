@@ -29,6 +29,7 @@ Run ```Prefix + I``` to initialize plugins.
 
 ### Iterm2
 For MacOS, key mappings config found in `macOS`
+**NOTE:** In settings - Keys - Navigation Shortcuts: change shortcut to choose a split pane to ***No Shortcut*** (otherwise option+numbers cannot be used special characters)
 
 ### Guake 
 For Linux, key mappings config found in `ubuntu`
