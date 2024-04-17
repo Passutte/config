@@ -25,6 +25,7 @@ cd config-main
 The setup script will print to screen and log the same contents to `/tmp/initial_setup.log`.
 
 ### Tmux
+Source config with ```tmux source ~/.tmux.conf```
 Run ```Prefix + I``` to initialize plugins.
 
 ### Iterm2
