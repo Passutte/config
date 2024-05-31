@@ -44,20 +44,42 @@ guake --save-preferences=guake.cfg
     ```
     fish
     ```
-2. install fisher plugin manager ([ref](https://github.com/jorgebucaran/fisher))
+2. config colors (web GUI)
+    ```
+    # configure the color, to e.g. Dracula
+    fish_config
+    ```
+3. install fisher plugin manager ([ref](https://github.com/jorgebucaran/fisher))
     ```
     curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
     ```
-3. install packages required by some plugins
+4. install packages required by some plugins
     * fonts required for `tide` ([ref](https://github.com/IlanCosman/tide#fonts))
         * [MesloLGS NF Regular.ttf](https://github.com/IlanCosman/tide/blob/assets/fonts/mesloLGS_NF_regular.ttf?raw=true)
         * [MesloLGS NF Bold.ttf](https://github.com/IlanCosman/tide/blob/assets/fonts/mesloLGS_NF_bold.ttf?raw=true)
         * [MesloLGS NF Italic.ttf](https://github.com/IlanCosman/tide/blob/assets/fonts/mesloLGS_NF_italic.ttf?raw=true)
         * [MesloLGS NF Bold Italic.ttf](https://github.com/IlanCosman/tide/blob/assets/fonts/mesloLGS_NF_bold_italic.ttf?raw=true)
         * Also, set the terminal font to one of these
-
+   * packages required by `PatrickF1/fzf` ([ref](https://github.com/PatrickF1/fzf.fish#installation))
+        * In fish shell (not working on MacOS):
+            ``` bash
+            mkdir -p ~/.local/bin && \
+            # fzf
+            git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
+            ~/.fzf/install && \
+            # fd
+            sudo apt install fd-find -y && \
+            ln -s (which fdfind) ~/.local/bin/fd &&\
+            # bat
+            sudo apt install bat -y && \
+            ln -s /usr/bin/batcat ~/.local/bin/bat
+            ```
 4. install plugins with `fisher`
     ```
+    fisher install jorgebucaran/fisher && \
+    fisher install PatrickF1/fzf.fish && \
+    fisher install IlanCosman/tide && \
+    fisher install edc/bass    # using bash utilities in fish, check out https://github.com/edc/bass
     fisher install IlanCosman/tide@v6
     ```
 
