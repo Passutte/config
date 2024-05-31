@@ -80,13 +80,8 @@ guake --save-preferences=guake.cfg
     fisher install PatrickF1/fzf.fish && \
     fisher install IlanCosman/tide && \
     fisher install edc/bass    # using bash utilities in fish, check out https://github.com/edc/bass
-    fisher install IlanCosman/tide@v6
     ```
 
-5. Set configuration
-    ```
-    tide configure --auto --style=Rainbow --prompt_colors='True color' --show_time='24-hour format' --rainbow_prompt_separators=Angled --powerline_prompt_heads=Sharp --powerline_prompt_tails=Flat --powerline_prompt_style='One line' --prompt_spacing=Compact --icons='Few icons' --transient=No
-    ```
 
 ### Additional Plugins
 * https://github.com/ohmyzsh/ohmyzsh/tree/master
