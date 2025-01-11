@@ -170,11 +170,13 @@ fi
 
 if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
   sub_step "bashrc"
-  cp ubuntu/.bashrc "$HOME"
-  
+  cat ubuntu/.bashrc >> "$HOME/.bashrc"
+  echo "Appended content of ubuntu/.bashrc to $HOME/.bashrc"
+
 elif [ $os = "macOS" ]; then
   sub_step "zshrc"
-  cp macOS/.zshrc "$HOME"
+  cat macOS/.zshrc >> "$HOME/.zshrc"
+  echo "Appended content of macOS/.zshrc to $HOME/.zshrc"
 fi
 
 sub_step "bash_aliases"
