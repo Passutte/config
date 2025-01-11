@@ -11,15 +11,15 @@ cd config-main
 
 * MacOS (NAME should be the name after /Users/... and USER is `echo $USER`):
   ```
-  sudo bash install.sh $NAME macOS $USER 2>&1 | tee /tmp/initial_setup.log
+  sudo bash install.sh macOS 2>&1 | tee /tmp/initial_setup.log
   ```
 * Ubuntu:
   ```
-  sudo bash install.sh $USER ubuntu 2>&1 | tee /tmp/initial_setup.log
+  sudo bash install.sh ubuntu 2>&1 | tee /tmp/initial_setup.log
   ```
 * Parallels (Ubuntu):
   ```
-  sudo bash install.sh $USER parallels 2>&1 | tee /tmp/initial_setup.log
+  sudo bash install.sh parallels 2>&1 | tee /tmp/initial_setup.log
   ```
 
 The setup script will print to screen and log the same contents to `/tmp/initial_setup.log`.
