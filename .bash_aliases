@@ -1,5 +1,4 @@
 # general
-alias sp="source ~/.zshrc"
 alias b="cd .."
 alias c="clear"
 

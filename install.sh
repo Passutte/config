@@ -8,10 +8,8 @@
 (( step_num=0 ))
 step_msg=""
 (( sub_step_num=1 ))
+
 os=""
-user_name=""
-user_name_macbook=""
-user_home_dir=""
 
 ##########################################
 # Functions
@@ -38,8 +36,7 @@ sub_step() {
 
 disp_usage() {
   # display script usage
-  echo "Usage: sudo bash install.sh \$USER macOS|ubuntu|parallels"
-  echo "  - USER: username"
+  echo "Usage: sudo bash install.sh macOS|ubuntu|parallels"
   echo "  - macOS: uses zshrc and iterm2"
   echo "  - ubuntu: uses bashrc and guake"
   echo "  - parallels: ubuntu running on parallels"
@@ -50,7 +47,7 @@ disp_usage() {
 ##########################################
 
 # check for valid usage
-if [ "$2" != "macOS" ] && [ "$2" != "ubuntu" ] && [ "$2" != "parallels" ]; then
+if [ "$1" != "macOS" ] && [ "$1" != "ubuntu" ] && [ "$1" != "parallels" ]; then
   # invalid usage
   disp_usage
   # Ref exit codes: https://www.cyberciti.biz/faq/linux-bash-exit-status-set-exit-statusin-bash/
@@ -61,41 +58,31 @@ elif [ "$EUID" -ne 0 ]; then
 
 else
   # Check if user exists and configure right home directory
-  if [ "$2" = "macOS" ]; then
+  if [ "$1" = "macOS" ]; then
     os="macOS"
     user_name=$1
     if [ ! -d "/Users/$1" ]; then
     disp_usage
     exit 22
     fi
-    user_home_dir="/Users/$user_name"
-    echo ">>> Starting setup for a macOS device with home directory: $user_home_dir"
 
-  elif [ "$2" = "ubuntu" ]; then
+  elif [ "$1" = "ubuntu" ]; then
     os="ubuntu"
     user_name=$1
     if [ ! -d "/home/$1" ]; then
     disp_usage
     exit 22
     fi
-    user_home_dir="/home/$user_name"
-    echo ">>> Starting setup for a ubuntu device with home directory: $user_home_dir"
 
-  elif [ "$2" = "parallels" ]; then
+  elif [ "$1" = "parallels" ]; then
     os="parallels"
-    user_name=$2
-    if [ ! -d "/home/$2" ]; then
+    user_name=$1
+    if [ ! -d "/home/$1" ]; then
     disp_usage
     exit 22
     fi
-    user_home_dir="/home/$user_name"
-    echo ">>> Starting setup for a parallels device with home directory: $user_home_dir"
-  
   fi
 fi
-
-# when running on parallels - this is needed for copying the files to the directories
-export HOME=$user_home_dir
 
 ##########################################
 # Installation Steps - Ubuntu
@@ -108,9 +95,6 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sub_step "fish"
     sudo apt-add-repository -y --no-update ppa:fish-shell/release-3
 
-    sub_step "copyq"
-    sudo add-apt-repository -y --no-update ppa:hluk/copyq
-    
     ##########################################
     step "apt update"
     sudo apt update -y
@@ -120,9 +104,6 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
 
     sub_step "fish"
     sudo apt install -y fish
-
-    sub_step "copyq"
-    sudo apt install -y copyq
 
     ##########################################
     step "install apt packages"
@@ -148,9 +129,6 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sub_step "guake"
     sudo apt install -y guake
 
-    sub_step "mosh"
-    sudo apt-get install mosh
-
     ##########################################
     step "Install Docker via convenience script"
     # https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
@@ -163,19 +141,15 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
 ##########################################
 elif [ $os = "macOS" ]; then
     step "install with brew"
-    user_name_macbook=$3
 
     sub_step "fish"
-    sudo -u $user_name_macbook brew install fish
+    sudo -u $USER brew install fish
 
     sub_step "iterm2"
-    sudo -u $user_name_macbook brew install --cask iterm2
-
-    sub_step "mosh"
-    sudo -u $user_name_macbook brew install mosh
+    sudo -u $USER brew install --cask iterm2
 
     sub_step "tmux"
-    sudo -u $user_name_macbook brew install tmux
+    sudo -u $USER brew install tmux
 
 fi
 
@@ -194,27 +168,35 @@ if [ $os = "parallels" ]; then
   cp .config/fish/config.fish /root/.config/fish
 fi
 
-sub_step "ssh"
-mkdir -p ~/.ssh && \
-cp .ssh/config ~/.ssh
-
 if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
   sub_step "bashrc"
-  cp ubuntu/.bashrc "$user_home_dir"
+  cp ubuntu/.bashrc "$HOME"
   
 elif [ $os = "macOS" ]; then
   sub_step "zshrc"
-  cp macOS/.zshrc "$user_home_dir"
+  cp macOS/.zshrc "$HOME"
 fi
 
 sub_step "bash_aliases"
-cp .bash_aliases "$user_home_dir"
+cp .bash_aliases "$HOME"
+
+
+##########################################
+# Bash Utilities
+##########################################
+sub_step "fzf"
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+sub_step "loki"
+git clone --depth 1 https://github.com/slim-bean/loki-shell.git ~/.loki-shell
+~/.loki-shell/install
 
 sub_step "tmux"
-cp .tmux.conf "$user_home_dir"
-cp .tmux "$user_home_dir"
-# tmux plugins
-git clone https://github.com/tmux-plugins/tpm "$user_home_dir/.tmux/plugins/tpm"
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+mkdir -p $HOME/.tmux/plugins/tpm
+cp .tmux.conf "$HOME"
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 
 ##########################################
 # Permissions

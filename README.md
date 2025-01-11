@@ -39,6 +39,8 @@ guake --restore-preferences=guake.cfga
 guake --save-preferences=guake.cfg
 ```
 
+Add hot key in keyshortcuts in computer settings. Add `guake -t`.
+
 ### Fish
 1. Enter fish shell
     ```
