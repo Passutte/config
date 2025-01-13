@@ -10,6 +10,8 @@ step_msg=""
 (( sub_step_num=1 ))
 
 os=""
+home=""
+user=""
 
 ##########################################
 # Functions
@@ -36,7 +38,7 @@ sub_step() {
 
 disp_usage() {
   # display script usage
-  echo "Usage: sudo bash install.sh macOS|ubuntu|parallels"
+  echo "Usage: sudo bash install.sh macOS|ubuntu|parallels $ HOME $ USER"
   echo "  - macOS: uses zshrc and iterm2"
   echo "  - ubuntu: uses bashrc and guake"
   echo "  - parallels: ubuntu running on parallels"
@@ -55,34 +57,19 @@ if [ "$1" != "macOS" ] && [ "$1" != "ubuntu" ] && [ "$1" != "parallels" ]; then
 elif [ "$EUID" -ne 0 ]; then
   disp_usage
   exit 1  # operation not permitted
-
 else
   # Check if user exists and configure right home directory
   if [ "$1" = "macOS" ]; then
     os="macOS"
-    user_name=$1
-    if [ ! -d "/Users/$1" ]; then
-    disp_usage
-    exit 22
-    fi
-
   elif [ "$1" = "ubuntu" ]; then
     os="ubuntu"
-    user_name=$1
-    if [ ! -d "/home/$1" ]; then
-    disp_usage
-    exit 22
-    fi
-
   elif [ "$1" = "parallels" ]; then
     os="parallels"
-    user_name=$1
-    if [ ! -d "/home/$1" ]; then
-    disp_usage
-    exit 22
-    fi
   fi
 fi
+
+home=$2
+user=$3
 
 ##########################################
 # Installation Steps - Ubuntu
@@ -91,9 +78,6 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
 
     ##########################################
     step "add ppa-repositories"
-
-    sub_step "fish"
-    sudo apt-add-repository -y --no-update ppa:fish-shell/release-3
 
     ##########################################
     step "apt update"
@@ -130,10 +114,14 @@ if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
     sudo apt install -y guake
 
     ##########################################
-    step "Install Docker via convenience script"
+    # step "Install Docker via convenience script"
     # https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
     curl -fsSL https://get.docker.com -o get-docker.sh
     sudo sh get-docker.sh
+    # Docker non-root user
+    sudo groupadd docker
+    sudo usermod -aG docker $user
+    newgrp docker
 
 
 ##########################################
@@ -143,13 +131,13 @@ elif [ $os = "macOS" ]; then
     step "install with brew"
 
     sub_step "fish"
-    sudo -u $USER brew install fish
+    sudo -u $user brew install fish
 
     sub_step "iterm2"
-    sudo -u $USER brew install --cask iterm2
+    sudo -u $user brew install --cask iterm2
 
     sub_step "tmux"
-    sudo -u $USER brew install tmux
+    sudo -u $user brew install tmux
 
 fi
 
@@ -159,8 +147,8 @@ fi
 step "config files"
 
 sub_step "fish"
-mkdir -p ~/.config/fish
-cp .config/fish/config.fish ~/.config/fish
+mkdir -p $home/.config/fish
+cp .config/fish/config.fish $home/.config/fish
 
 # fish needs to be run as sudo - different location in parallels
 if [ $os = "parallels" ]; then
@@ -170,43 +158,41 @@ fi
 
 if [ $os = "ubuntu" ] || [ $os = "parallels" ]; then
   sub_step "bashrc"
-  cat ubuntu/.bashrc >> "$HOME/.bashrc"
-  echo "Appended content of ubuntu/.bashrc to $HOME/.bashrc"
+  cat ubuntu/.bashrc >> "$home/.bashrc"
+  echo "Appended content of ubuntu/.bashrc to $home/.bashrc"
 
 elif [ $os = "macOS" ]; then
   sub_step "zshrc"
-  cat macOS/.zshrc >> "$HOME/.zshrc"
-  echo "Appended content of macOS/.zshrc to $HOME/.zshrc"
+  cat macOS/.zshrc >> "$home/.zshrc"
+  echo "Appended content of macOS/.zshrc to $home/.zshrc"
 fi
 
 sub_step "bash_aliases"
-cp .bash_aliases "$HOME"
+cp .bash_aliases "$home"
 
 
 ##########################################
 # Bash Utilities
 ##########################################
 sub_step "fzf"
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+git clone --depth 1 https://github.com/junegunn/fzf.git $home/.fzf
+sudo -u $(logname) $home/.fzf/install
 
 sub_step "loki"
-git clone --depth 1 https://github.com/slim-bean/loki-shell.git ~/.loki-shell
-~/.loki-shell/install
+git clone --depth 1 https://github.com/slim-bean/loki-shell.git $home/.loki-shell
+sudo -u $(logname) $home/.loki-shell/install
 
 sub_step "tmux"
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-mkdir -p $HOME/.tmux/plugins/tpm
-cp .tmux.conf "$HOME"
-git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm $home/.tmux/plugins/tpm
+cp .tmux.conf "$home"
 
 ##########################################
 # Permissions
 ##########################################
 if [ $os = "parallels" ]; then
   step "Permissions"
-  sudo chown -R $user_name:$user_name $HOME/.config/fish
-  chmod -R 700 $HOME/.config/fish
+  sudo chown -R $user:$user $home/.config/fish
+  chmod -R 700 $home/.config/fish
 fi
 
 exit 0
