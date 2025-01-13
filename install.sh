@@ -183,7 +183,7 @@ git clone --depth 1 https://github.com/slim-bean/loki-shell.git $home/.loki-shel
 sudo -u $(logname) $home/.loki-shell/install
 
 sub_step "tmux"
-git clone https://github.com/tmux-plugins/tpm $home/.tmux/plugins/tpm
+sudo -u $(logname) git clone https://github.com/tmux-plugins/tpm $home/.tmux/plugins/tpm
 cp .tmux.conf "$home"
 
 ##########################################
