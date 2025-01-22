@@ -147,8 +147,8 @@ fi
 step "config files"
 
 sub_step "fish"
-mkdir -p $home/.config/fish
-cp .config/fish/config.fish $home/.config/fish
+sudo -u $(logname) mkdir -p $home/.config/fish
+sudo -u $(logname) cp .config/fish/config.fish $home/.config/fish
 
 # fish needs to be run as sudo - different location in parallels
 if [ $os = "parallels" ]; then
