@@ -175,11 +175,11 @@ cp .bash_aliases "$home"
 # Bash Utilities
 ##########################################
 sub_step "fzf"
-git clone --depth 1 https://github.com/junegunn/fzf.git $home/.fzf
+sudo -u $(logname) git clone --depth 1 https://github.com/junegunn/fzf.git $home/.fzf
 sudo -u $(logname) $home/.fzf/install
 
 sub_step "loki"
-git clone --depth 1 https://github.com/slim-bean/loki-shell.git $home/.loki-shell
+sudo -u $(logname) git clone --depth 1 https://github.com/slim-bean/loki-shell.git $home/.loki-shell
 sudo -u $(logname) $home/.loki-shell/install
 
 sub_step "tmux"
