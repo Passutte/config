@@ -66,9 +66,6 @@ Add hot key in keyshortcuts in computer settings. Add `guake -t`.
         * In fish shell (not working on MacOS):
             ``` bash
             mkdir -p ~/.local/bin && \
-            # fzf
-            git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && \
-            ~/.fzf/install && \
             # fd
             sudo apt install fd-find -y && \
             ln -s (which fdfind) ~/.local/bin/fd &&\
